@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "5b4d8a32-cf66-465e-9e3a-106ff3341003",
+		"name": "4th-express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29633823"
+	},
+	"item": [
+		{
+			"name": "篩選貼文",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/posts?timeSort=dasc&q=新增1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "timeSort",
+							"value": "dasc"
+						},
+						{
+							"key": "q",
+							"value": "新增1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用戶新增貼文",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\":\"新增3\",\n    \"image\": \"https://thumb.fakeface.rest/thumb_female_27_5a94a297efb15caf0e3d769ce1694953e8bf33e2.jpg\",\n    // \"name\": \"小美\",\n    \"likes\": 1,\n    \"user\": \"66227f0e3c32c5c7d57299a4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
