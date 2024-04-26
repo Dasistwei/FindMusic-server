@@ -17,9 +17,6 @@ router.get('/', async(req, res, next)=> {
       path: 'user',
       select: 'name photo'
     }).sort(timeSort)    
-    
-    // console.log(timeSort, q)
-    // const allPosts = await Post.find({})
     handleSuccess(res, posts)    
   } catch (error) {
     handleError({res, error})
@@ -29,8 +26,14 @@ router.get('/', async(req, res, next)=> {
 // POST
 // 設計貼文 POST API，圖片先傳固定 url
 router.post('/', async(req, res, next)=> {
-  console.log(req.body)
-  const { content, image, name, likes, user } = req.body
+  const data = req.body
+  for (const key in data) {
+    if(typeof data[key] === 'string'){
+      data[key]= data[key].trim()
+    }
+  }
+  const { content, image, name, likes, user } = data
+  
   const result = await Post.create(
     {
       name,
@@ -46,7 +49,7 @@ router.post('/', async(req, res, next)=> {
 //PUT
 router.put('/:id', async(req, res, next)=> {
   try {
-    console.log(req.params)
+
     const { content, image, name, likes } = req.body
     const result = await Post.findByIdAndUpdate(
       req.params.id,
@@ -69,7 +72,7 @@ router.put('/:id', async(req, res, next)=> {
 // DELETE
 router.delete('/:id', async(req, res, next)=> {
   try {
-    console.log('req.params.id', req.params.id)
+
     const result = await Post.findByIdAndDelete(req.params.id)
     if(result !== null){
       handleSuccess(res, result)
@@ -91,16 +94,3 @@ router.delete('/', async(req, res, next)=> {
 })
 
 module.exports = router
-
-// const init = async() =>{
-//   const req = {query: { timeSort: 'dasc', q: '新增' }}
-//   const timeSort = req.query.timeSort === 'asc' ? "createdAt" : "-createdAt"
-//   const  q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {}
-//   const posts = await Post.find(q).populate({
-//     path: 'user',
-//     select: 'name photo'
-//   }).sort(timeSort)
-//   console.log(posts)
-//   // console.log(q)
-// }
-// init()

@@ -4,6 +4,10 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: [true, '請輸入您的名字']
     },
+    password: {
+      type: String,
+      required: [true, '請輸入您的密碼']
+    },
     email: {
       type: String,
       required: [true, '請輸入您的 Email'],
