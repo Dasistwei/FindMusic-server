@@ -1,0 +1,13 @@
+; 主線任務
+1. 將第四週期中考作業加上更嚴謹的錯誤狀態：
+  status
+2. 請設計一個 middleware，讓 controller 程式碼裡面沒有 try catch
+  /routes/posts
+; 3. 請透過環境變數執行指令加上 dev、production 的客製化回饋
+;   package.json script
+4. 承第二點，請觀看此張圖，確保你的後端語言有客製化各種錯誤狀態，包含 NPM 的錯誤訊息客製化
+  next(error)
+  async 客製化處理錯誤
+;5. 請透過 node.js uncaughtException、unhandledRejection 來捕捉預期外的錯誤
+  ; a) uncaught catch error
+  ; b) other uncaught error
