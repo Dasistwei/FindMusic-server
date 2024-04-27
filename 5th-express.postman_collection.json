@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "0d8d4b91-16b7-4c36-9672-3d4e78d27762",
+		"name": "5th-express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29633823"
+	},
+	"item": [
+		{
+			"name": "任務功能",
+			"item": [
+				{
+					"name": "篩選貼文",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts?timeSort=dasc&limit=20",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "timeSort",
+									"value": "dasc"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用戶新增貼文",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"新增3\",\n    \"image\": \"https://thumb.fakeface.rest/thumb_female_27_5a94a297efb15caf0e3d769ce1694953e8bf33e2.jpg\",\n    // \"name\": \"小美\",\n    \"likes\": 1,\n    \"user\": \"66227f0e3c32c5c7d57299a4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "普通功能",
+			"item": [
+				{
+					"name": "取得貼文",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增貼文",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"   新增3.    \",\n    \"image\": \"https://thumb.fakeface.rest/thumb_female_27_5a94a297efb15caf0e3d769ce1694953e8bf33e2.jpg\",\n    \"name\": \"小美\",\n    \"likes\": 1,\n    \"user\": \"66227f0e3c32c5c7d57299a4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "測試OPTIONS",
+					"request": {
+						"method": "OPTIONS",
+						"header": [],
+						"url": {
+							"raw": "https://postsrestfulapi-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"postsrestfulapi-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新貼文",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\":\"修改100\",\n    \"image\": \"http://localhost:8080/posts\",\n    \"name\": \"小白\",\n    \"likes\": 102\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts/662b616e62358f90a9eeea1c",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts",
+								"662b616e62358f90a9eeea1c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除單筆貼文",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts/662cbe0216a70a7fac9c65b4",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts",
+								"662cbe0216a70a7fac9c65b4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除全部貼文",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://fourth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fourth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
