@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: [true, '請輸入您的名字']
     },
-    sex: {
+    gender: {
       type: String,
       enum: ["male", "female"]
     },

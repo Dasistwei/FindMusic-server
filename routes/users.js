@@ -4,7 +4,6 @@ const handleErrorAsync = require('../service/handleErrorAsync')
 const express = require('express')
 const User = require('../models/user')
 
-
 const router = express.Router()
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
@@ -17,7 +16,7 @@ const {isAuth, generateSendJWT} = require('../service/auth')
 // bcrypt.compare('hhh', '$2a$12$XgUIKrD9ZdYYSnYzJAzNGOhokiSW.NFi6ePnrcg9vpYO8IN6hh282')
 //   .then(res=> console.log(res))
 // console.log(validator.isLength('passwo',{min:8}))
-console.log(validator.isEmail('passwo@s.com'))
+// console.log(validator.isEmail('passwo@s.com'))
 
 router.get('/', handleErrorAsync(async (req, res, next) => {
   
@@ -62,15 +61,16 @@ router.post('/sign_up', handleErrorAsync(async (req, res, next) => {
 // 登入
 router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
   let { email, password } = req.body
+  
 
   if(email===undefined|| password === undefined){
     return next(appError(400, '帳號或密碼不可為空白'))
   }
   // 用email 找user
-  const user = await User.find({email}).select('+password')
+  const user = await User.findOne({email}).select('+password')
 
   // 核對密碼
-  const authPassword = await bcrypt.compare(password, user[0].password)
+  const authPassword = await bcrypt.compare(password, user.password)
 
   if(!authPassword){
     return next(appError(400, '帳號或密碼有誤'))
@@ -80,17 +80,10 @@ router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
 }
 ));
 
-// 查看個人資料頁面
-// 要驗證是否登入
-router.get('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
-  handleSuccess(res, req.user)
-}
-));
-
 // 更新密碼
 // 要驗證是否登入
 router.put('/update_password', isAuth, handleErrorAsync(async (req, res, next) => {
-  let {email, password, confirmPassword} = req.body
+  let { password, confirmPassword} = req.body
 
   if(password !== confirmPassword){
     return next(appError(400, '請確認兩次都輸入相同密碼'))
@@ -104,6 +97,33 @@ router.put('/update_password', isAuth, handleErrorAsync(async (req, res, next) =
 
 }
 ));
+
+// 查看個人資料頁面
+// 要驗證是否登入
+router.get('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
+  handleSuccess(res, req.user)
+}
+));
+
+// 更新個人資料頁面
+// 要驗證是否登入
+router.put('/update_profile', isAuth, handleErrorAsync(async (req, res, next) => {
+  
+  let {photo, name, gender} = req.body
+  // console.log(photo, name, gender)
+  const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
+    photo, 
+    name, 
+    gender
+  },{
+    new: true
+  })
+
+  handleSuccess(res, updatedUser)
+  // generateSendJWT(updatedUser, res, 200)
+}
+));
+
 
 module.exports = router
 

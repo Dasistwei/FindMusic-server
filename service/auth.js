@@ -6,7 +6,7 @@ const User = require('../models/user')
 
 // jwt => sign 簽名 =>
 const generateSendJWT = (user, res, statusCode) =>{
-
+  // console.log('user', user)
   // 產生token
   const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_DAY
@@ -45,8 +45,7 @@ const isAuth = async(req, res, next) =>{
 
   const currentUser = await User.find({ _id: decode.id})
   req.user = currentUser  
-   
-  // console.log('isAuth')
+
   next()
 }
 module.exports = {
