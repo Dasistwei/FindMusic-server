@@ -77,16 +77,3 @@ router.delete('/', handleErrorAsync(async(req, res, next)=> {
 }))
 
 module.exports = router
-
-// const init = async() =>{
-//   const req = {query: { timeSort: 'dasc', q: '新增' }}
-//   const timeSort = req.query.timeSort === 'asc' ? "createdAt" : "-createdAt"
-//   const  q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {}
-//   const posts = await Post.find(q).populate({
-//     path: 'user',
-//     select: 'name photo'
-//   }).sort(timeSort)
-//   console.log(posts)
-//   // console.log(q)
-// }
-// init()

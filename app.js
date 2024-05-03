@@ -9,6 +9,14 @@ const cors = require('cors')
 require('./connections/mongoose')
 
 
+// 捕捉預期外的錯誤
+ process.on('uncaughtException', err => {
+  // 記錄錯誤下來，等到服務都處理完後，停掉該 process
+	console.error('Uncaughted Exception！')
+	console.error(err);
+	process.exit(1);
+});
+
 const httpController = require('./controllers/http')
 
 var indexRouter = require('./routes/index');
@@ -23,6 +31,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
+
+app.post('/register', async (req, res) => {
+  try {
+    const {nickname, email, password} = req.body
+    if (nickname != '' && email != '' && password != '') {
+      const newUser = await User.create({
+        name: nickname,
+        email,
+        password
+      });
+      const allUsers = await User.find({})
+      res.status(200).json({
+        status: 'success',
+        message: `${nickname} 註冊成功`,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
