@@ -3,92 +3,78 @@ const router = express.Router()
 
 const Post = require('../models/post')
 const User = require('../models/user')
-
+const { isAuth } = require('../service/auth')
+// console.log('s', isAuth)
 const handleSuccess = require('../service/handleSuccess')
-const handleError = require('../service/handleError')
+const appError = require('../service/appError')
+const handleErrorAsync = require('../service/handleErrorAsync')
 
 // GET all posts
 // 設計貼文的 GET API，並需設計篩選功能(從新到舊貼文、從舊到最新、關鍵字搜尋)
-router.get('/', async(req, res, next)=> {
-  try {
-    const timeSort = req.query.timeSort === 'asc' ? "createdAt" : "-createdAt"
-    const  q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {}
-    const posts = await Post.find(q).populate({
-      path: 'user',
-      select: 'name photo'
-    }).sort(timeSort)    
-    
-    // console.log(timeSort, q)
-    // const allPosts = await Post.find({})
-    handleSuccess(res, posts)    
-  } catch (error) {
-    handleError({res, error})
-  }
-})
+router.get('/', handleErrorAsync(async(req, res, next)=> {
+  const timeSort = req.query.timeSort === 'asc' ? "createdAt" : "-createdAt"
+  const  q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {}
+  const posts = await Post.find(q).populate({
+    path: 'user',
+    select: 'name photo'
+  }).sort(timeSort)    
+  
+  handleSuccess(res, posts)    
+}))
 
 // POST
 // 設計貼文 POST API，圖片先傳固定 url
-router.post('/', async(req, res, next)=> {
-  console.log(req.body)
+router.post('/', isAuth,handleErrorAsync(async(req, res, next)=> {
   const { content, image, name, likes, user } = req.body
+  // mongoose 錯誤
+  if(content === undefined || image === undefined || name === undefined || likes === undefined || user === undefined){
+    return next(appError(400, "欄位填寫有誤", next))
+  }
   const result = await Post.create(
     {
       name,
-      content,
+      content:content.trim(),
       image,
       likes,
       user
     }
   )  
   handleSuccess(res, result)
-})
+}))
 
 //PUT
-router.put('/:id', async(req, res, next)=> {
-  try {
-    console.log(req.params)
-    const { content, image, name, likes } = req.body
-    const result = await Post.findByIdAndUpdate(
-      req.params.id,
-      {
-        name,
-        content,
-        image,
-        likes
-      }
-    )
-    if(result !== null){
-      handleSuccess(res, result)
-    }else{
-      handleError({res})  
-    }  
-  } catch (error) {
-    handleError({res})
-  }
-})
-// DELETE
-router.delete('/:id', async(req, res, next)=> {
-  try {
-    console.log('req.params.id', req.params.id)
-    const result = await Post.findByIdAndDelete(req.params.id)
-    if(result !== null){
-      handleSuccess(res, result)
-    }else{
-      handleError({res})  
-    }  
-  } catch (error) {
-    handleError({error,res})
-  }
-})
-// DELETE ALL
-router.delete('/', async(req, res, next)=> {
-  try {
-    const result = await Post.deleteMany()
+router.put('/:id', handleErrorAsync(async(req, res, next)=> {
+  const { content, image, name, likes } = req.body
+  const result = await Post.findByIdAndUpdate(
+    req.params.id,
+    {
+      name,
+      content:content.trim(),
+      image,
+      likes
+    },{
+      runValidators: true
+    }
+  )
+  if(result !== null){
     handleSuccess(res, result)
-  } catch (error) {
-    handleError({error,res})
   }
-})
+}))
+// DELETE
+router.delete('/:id', handleErrorAsync(async(req, res, next)=> {
+  const result = await Post.findByIdAndDelete(req.params.id)
+
+  if(result !== null){
+    handleSuccess(res, result)
+  }else{
+    next(appError(400,"查無此貼文"))
+  }
+}))
+// DELETE ALL
+router.delete('/', handleErrorAsync(async(req, res, next)=> {
+  const result = await Post.deleteMany()
+  handleSuccess(res, result)
+}))
 
 module.exports = router
 

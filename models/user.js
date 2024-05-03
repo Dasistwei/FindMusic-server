@@ -4,6 +4,16 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: [true, '請輸入您的名字']
     },
+    sex: {
+      type: String,
+      enum: ["male", "female"]
+    },
+    password: {
+      type: String,
+      required: [true, '請輸入您的密碼'],
+      minlength: 8,
+      select: false
+    },
     email: {
       type: String,
       required: [true, '請輸入您的 Email'],
@@ -11,7 +21,12 @@ const userSchema = new mongoose.Schema({
       lowercase: true,
       select: false
     },
-    photo: String,
+    photo: {
+      type: String
+    }
+  },
+  {
+    versionKey: false
   });
 
 const User = mongoose.model('user', userSchema);
