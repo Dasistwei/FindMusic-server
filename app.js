@@ -32,25 +32,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
-app.post('/register', async (req, res) => {
-  try {
-    const {nickname, email, password} = req.body
-    if (nickname != '' && email != '' && password != '') {
-      const newUser = await User.create({
-        name: nickname,
-        email,
-        password
-      });
-      const allUsers = await User.find({})
-      res.status(200).json({
-        status: 'success',
-        message: `${nickname} 註冊成功`,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
@@ -95,7 +76,6 @@ const resErrorDev = (err, res) =>{
 
 //攔截程式碼錯誤
 app.use((err, req, res, next) => {
-  console.log('err.statusCode', err)
   err.statusCode = err.statusCode || 500
 
   if(process.env.NODE_ENV == 'dev' && err.name === 'SyntaxError'){

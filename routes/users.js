@@ -10,13 +10,6 @@ const bcrypt = require('bcryptjs')
 
 const handleSuccess = require('../service/handleSuccess')
 const {isAuth, generateSendJWT} = require('../service/auth')
-// console.log(isAuth, generateSendJWT)
-// bcrypt.hash('hhh', 12)
-// .then(res=> console.log(res))
-// bcrypt.compare('hhh', '$2a$12$XgUIKrD9ZdYYSnYzJAzNGOhokiSW.NFi6ePnrcg9vpYO8IN6hh282')
-//   .then(res=> console.log(res))
-// console.log(validator.isLength('passwo',{min:8}))
-// console.log(validator.isEmail('passwo@s.com'))
 
 router.get('/', handleErrorAsync(async (req, res, next) => {
   
@@ -62,7 +55,6 @@ router.post('/sign_up', handleErrorAsync(async (req, res, next) => {
 router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
   let { email, password } = req.body
   
-
   if(email===undefined|| password === undefined){
     return next(appError(400, '帳號或密碼不可為空白'))
   }
@@ -76,7 +68,6 @@ router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
     return next(appError(400, '帳號或密碼有誤'))
   }
   generateSendJWT(user, res, 200)
-  // handleSuccess(res, 'newUser')
 }
 ));
 
@@ -110,7 +101,6 @@ router.get('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
 router.put('/update_profile', isAuth, handleErrorAsync(async (req, res, next) => {
   
   let {photo, name, gender} = req.body
-  // console.log(photo, name, gender)
   const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
     photo, 
     name, 
@@ -120,27 +110,9 @@ router.put('/update_profile', isAuth, handleErrorAsync(async (req, res, next) =>
   })
 
   handleSuccess(res, updatedUser)
-  // generateSendJWT(updatedUser, res, 200)
 }
 ));
 
 
 module.exports = router
 
-
-const init = async() =>{
-  const decode = await new Promise((resolve, reject)=>{
-    let token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzBiMWMwZTNlNjZjM2M4MGM0MGJlYSIsImlhdCI6MTcxNDQ2NzI2NCwiZXhwIjoxNzE0NjQwMDY0fQ.TUakA4HKdqg8te2bkBAsSxn5ZmhCy4cj5mUNd68Q24o"
-    jwt.verify(token, process.env.JWT_SECRET, (err, payload)=>{
-      if(err){
-        reject(err)
-      }else{
-        resolve(payload)
-      }
-    })
-  })
-  const currentUser = await User.find({ _id: decode.id})
-  console.log(decode.id)
-  console.log(currentUser)
-}
-// init()

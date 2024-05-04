@@ -4,14 +4,15 @@ const router = express.Router()
 const Post = require('../models/post')
 const User = require('../models/user')
 const { isAuth } = require('../service/auth')
-// console.log('s', isAuth)
+
 const handleSuccess = require('../service/handleSuccess')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
 
 // GET all posts
 // 設計貼文的 GET API，並需設計篩選功能(從新到舊貼文、從舊到最新、關鍵字搜尋)
-router.get('/', handleErrorAsync(async(req, res, next)=> {
+// 檢查會員是否登入
+router.get('/', isAuth, handleErrorAsync(async(req, res, next)=> {
   const timeSort = req.query.timeSort === 'asc' ? "createdAt" : "-createdAt"
   const  q = req.query.q !== undefined ? {"content": new RegExp(req.query.q)} : {}
   const posts = await Post.find(q).populate({
@@ -24,6 +25,7 @@ router.get('/', handleErrorAsync(async(req, res, next)=> {
 
 // POST
 // 設計貼文 POST API，圖片先傳固定 url
+// 檢查會員是否登入
 router.post('/', isAuth,handleErrorAsync(async(req, res, next)=> {
   const { content, image, name, likes, user } = req.body
   // mongoose 錯誤
@@ -43,7 +45,7 @@ router.post('/', isAuth,handleErrorAsync(async(req, res, next)=> {
 }))
 
 //PUT
-router.put('/:id', handleErrorAsync(async(req, res, next)=> {
+router.put('/:id', isAuth, handleErrorAsync(async(req, res, next)=> {
   const { content, image, name, likes } = req.body
   const result = await Post.findByIdAndUpdate(
     req.params.id,
@@ -61,7 +63,7 @@ router.put('/:id', handleErrorAsync(async(req, res, next)=> {
   }
 }))
 // DELETE
-router.delete('/:id', handleErrorAsync(async(req, res, next)=> {
+router.delete('/:id', isAuth, handleErrorAsync(async(req, res, next)=> {
   const result = await Post.findByIdAndDelete(req.params.id)
 
   if(result !== null){
@@ -71,7 +73,7 @@ router.delete('/:id', handleErrorAsync(async(req, res, next)=> {
   }
 }))
 // DELETE ALL
-router.delete('/', handleErrorAsync(async(req, res, next)=> {
+router.delete('/', isAuth, handleErrorAsync(async(req, res, next)=> {
   const result = await Post.deleteMany()
   handleSuccess(res, result)
 }))
