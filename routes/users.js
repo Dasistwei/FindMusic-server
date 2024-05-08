@@ -18,7 +18,6 @@ router.get(
     handleSuccess(res, newUser);
   })
 );
-
 // 註冊
 router.post(
   "/sign_up",
@@ -33,6 +32,16 @@ router.post(
     if (!name || !email || !password) {
       return next(appError(400, "欄位未填寫", next));
     }
+    // 檢查email格式
+    if (!validator.isEmail(email)) {
+      return next(appError(400, "email格式錯誤", next));
+    }
+    const user = await User.findOne({ email });
+    if (user) {
+      console.log("email 已被註冊");
+      return next(appError(400, "email 已被註冊"));
+    }
+
     // 暱稱 name 長度需至少 2 個字元以上
     if (!validator.isLength(name, { min: 2 })) {
       return next(appError(400, "暱稱 name 長度需至少 2 個字元以上"));
@@ -40,17 +49,18 @@ router.post(
 
     // 密碼必須大於八碼
     if (
-      !validator.isLength(password, { min: 8, minLowercase: 1, minNumbers: 1 })
+      !validator.isStrongPassword(password, {
+        minLength: 8,
+        minUppercase: 0,
+        minNumbers: 1,
+        minSymbols: 0,
+      })
     ) {
-      return next(appError(400, "密碼數字必須大於或等於八碼", next));
+      return next(appError(400, "密碼必須英數混合和 8 碼以上", next));
     }
     // 兩次輸入密碼須一致
     if (password !== confirmPassword) {
       return next(appError(400, "密碼不一致", next));
-    }
-    // 檢查email格式
-    if (!validator.isEmail(email)) {
-      return next(appError(400, "email格式錯誤", next));
     }
 
     //存到資料庫前 加密密碼
@@ -77,6 +87,10 @@ router.get(
     // 用email 找user
     const user = await User.findOne({ email }).select("+password");
 
+    //沒有註冊過的帳號
+    if (!user) {
+      return next(appError(400, "此帳號未註冊"));
+    }
     // 核對密碼
     const authPassword = await bcrypt.compare(password, user.password);
 
