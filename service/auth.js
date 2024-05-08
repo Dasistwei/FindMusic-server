@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const appError = require('../service/appError')
 const handleErrorAsync = require('../service/handleErrorAsync')
-const express = require('express')
+
 const User = require('../models/user')
 
 // jwt => sign 簽名 =>
@@ -21,7 +21,7 @@ const generateSendJWT = (user, res, statusCode) =>{
     }
   })
 }
-const isAuth = async(req, res, next) =>{
+const isAuth = handleErrorAsync(async(req, res, next) =>{
   //驗證token
   let token;
   if(req.headers.authorization&&req.headers.authorization.startsWith('Bearer')){
@@ -45,7 +45,7 @@ const isAuth = async(req, res, next) =>{
   req.user = currentUser  
 
   next()
-}
+})
 module.exports = {
   isAuth, 
   generateSendJWT

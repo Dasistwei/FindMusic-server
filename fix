@@ -8,7 +8,24 @@
 ; 這裡有一些建議給同學參考：
 
 ; week4、5
-更新貼文若找不到對應 id 時建議回傳錯誤，
-另外也建議在 findByIdAndUpdate 的第三個參數加上 runValidators: true，跑 Schema 的驗證規則，
-以及對 content 加上 .trim() 或判斷，避免可以被修改為空值或空白內容
-handleError 若沒有使用到的話可以將其移除
+; 更新貼文若找不到對應 id 時建議回傳錯誤，
+; 另外也建議在 findByIdAndUpdate 的第三個參數加上 runValidators: true，跑 Schema 的驗證規則，
+; 以及對 content 加上 .trim() 或判斷，避免可以被修改為空值或空白內容
+; handleError 若沒有使用到的話可以將其移除
+
+; week6
+註冊
+可參考設計稿加入驗證內容與錯誤訊息，像是密碼需英數混合、暱稱至少兩個字元以上等等
+建議補上 findOne 檢查 email 是否已存在資料庫，若存在可回傳「email 已被註冊」的訊息
+
+登入
+沒有註冊過的帳號登入，可提示此帳號尚未註冊
+
+重設密碼
+也需要符合密碼規則，英數混合和 8 碼以上
+
+其他建議
+; auth.js 裡的 isAuth 方法會建議加入 handleErrorAsync，以透過 catch 捕捉錯誤，目前會造成 server error
+; auth.js 檔案可以不用引入 express
+; uncaughtException 目前在 app.js 裡面寫了兩次，建議保留 13 行的就好囉
+; 程式碼撰寫風格建議保持一致，這部分可搭配像是 Prettier 的工具來為程式碼做自動排版
