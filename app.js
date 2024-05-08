@@ -22,6 +22,7 @@ const httpController = require('./controllers/http')
 var indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts')
 const usersRouter = require('./routes/users')
+const uploadRouter = require('./routes/upload')
 
 var app = express();
 
@@ -36,8 +37,10 @@ app.use(cors())
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
-app.use(httpController.pageNotFound)
+app.use('/upload', uploadRouter);
 
+
+app.use(httpController.pageNotFound)
 
 // 補捉程式錯誤
 process.on('uncaughtException', err => {
@@ -72,7 +75,6 @@ const resErrorDev = (err, res) =>{
     }
   );
 }
-
 
 //攔截程式碼錯誤
 app.use((err, req, res, next) => {

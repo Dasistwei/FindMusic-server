@@ -18,13 +18,22 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 }
 ));
 
+
 // 註冊
 router.post('/sign_up', handleErrorAsync(async (req, res, next) => {
+  for (const key in req.body) {
+    req.body[key]= req.body[key].trim()
+  }
+
   let {name, email, password, confirmPassword} = req.body
-  
+
   //欄位不可為空
   if (!name || !email || !password ) {
     return next(appError(400, "欄位未填寫", next))
+  }
+  // 暱稱 name 長度需至少 2 個字元以上
+  if(!validator.isLength(name, {min: 2})){
+    return next(appError(400, "暱稱 name 長度需至少 2 個字元以上"))
   }
   // 密碼必須大於八碼
   if (!validator.isLength(password, {min:8})) {
