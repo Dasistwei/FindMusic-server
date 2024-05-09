@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const appError = require("../service/appError");
-const handleErrorAsync = require("../service/handleErrorAsync");
+const jwt = require('jsonwebtoken');
+const appError = require('../service/appError');
+const handleErrorAsync = require('../service/handleErrorAsync');
 
-const User = require("../models/user");
+const User = require('../models/user');
 
 // jwt => sign 簽名 =>
 const generateSendJWT = (user, res, statusCode) => {
@@ -14,7 +14,7 @@ const generateSendJWT = (user, res, statusCode) => {
 
   //回傳狀態給client端
   res.status(statusCode).json({
-    status: "success",
+    status: 'success',
     user: {
       token,
       name: user.name,
@@ -26,12 +26,12 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith('Bearer')
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    token = req.headers.authorization.split(' ')[1];
   }
   if (!token) {
-    return next(appError(401, "請登入", next));
+    return next(appError(401, '請登入', next));
   }
   //驗證密碼
   const decode = await new Promise((resolve, reject) => {
