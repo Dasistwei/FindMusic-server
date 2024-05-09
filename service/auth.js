@@ -21,6 +21,16 @@ const generateSendJWT = (user, res, statusCode) =>{
     }
   })
 }
+const generateUrlJWT = (user, res) =>{
+  // 產生token
+  const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_DAY
+  })
+  user.password = undefined
+
+  res.redirect(`${process.env.GOOGLE_JWT_REDIRECT_URL}?token=${token}&name=${user.name}`)
+}
+
 const isAuth = handleErrorAsync(async(req, res, next) =>{
   //驗證token
   let token;
@@ -48,5 +58,6 @@ const isAuth = handleErrorAsync(async(req, res, next) =>{
 })
 module.exports = {
   isAuth, 
-  generateSendJWT
+  generateSendJWT,
+  generateUrlJWT
 }

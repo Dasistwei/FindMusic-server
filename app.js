@@ -7,7 +7,7 @@ const cors = require('cors')
 
 //DB
 require('./connections/mongoose')
-
+require('./connections/passport')
 
 // 捕捉預期外的錯誤
  process.on('uncaughtException', err => {

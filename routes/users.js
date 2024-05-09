@@ -9,15 +9,14 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 
 const handleSuccess = require('../service/handleSuccess')
-const {isAuth, generateSendJWT} = require('../service/auth')
+const {isAuth, generateSendJWT, generateUrlJWT} = require('../service/auth')
+const passport = require('passport')
 
-router.get('/', handleErrorAsync(async (req, res, next) => {
-  
+router.get('/', handleErrorAsync(async (req, res) => {  
   const newUser = await User.find({});
   handleSuccess(res, newUser)
 }
 ));
-
 
 // 註冊
 router.post('/sign_up', handleErrorAsync(async (req, res, next) => {
@@ -58,7 +57,7 @@ router.post('/sign_up', handleErrorAsync(async (req, res, next) => {
   });
   generateSendJWT(newUser, res, 200)
 }
-));
+))
 
 // 登入
 router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
@@ -81,14 +80,13 @@ router.get('/sign_in', handleErrorAsync(async (req, res, next) => {
 ));
 
 // 更新密碼
-// 要驗證是否登入
 router.put('/update_password', isAuth, handleErrorAsync(async (req, res, next) => {
   let { password, confirmPassword} = req.body
 
   if(password !== confirmPassword){
     return next(appError(400, '請確認兩次都輸入相同密碼'))
   }
-  newPassword = await bcrypt.hash(password, 12)
+  let newPassword = await bcrypt.hash(password, 12)
   const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
     password: newPassword 
   })
@@ -100,14 +98,13 @@ router.put('/update_password', isAuth, handleErrorAsync(async (req, res, next) =
 
 // 查看個人資料頁面
 // 要驗證是否登入
-router.get('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
+router.get('/profile', isAuth, handleErrorAsync(async (req, res) => {
   handleSuccess(res, req.user)
 }
 ));
 
 // 更新個人資料頁面
-// 要驗證是否登入
-router.put('/update_profile', isAuth, handleErrorAsync(async (req, res, next) => {
+router.put('/update_profile', isAuth, handleErrorAsync(async (req, res) => {
   
   let {photo, name, gender} = req.body
   const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
@@ -120,8 +117,14 @@ router.put('/update_profile', isAuth, handleErrorAsync(async (req, res, next) =>
 
   handleSuccess(res, updatedUser)
 }
-));
+))
 
+router.get('/google', passport.authenticate('google', {
+  scope: ['email', 'profile']
+}))
+router.get('/google/callback', passport.authenticate('google', {session: false}), async(req, res) => {
+  generateUrlJWT(req.user, res)
+})
 
 module.exports = router
 
