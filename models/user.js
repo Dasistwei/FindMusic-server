@@ -1,34 +1,36 @@
 const mongoose = require('mongoose');
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: {
       type: String,
-      required: [true, '請輸入您的名字']
+      required: [true, '請輸入您的名字'],
     },
     gender: {
       type: String,
-      enum: ["male", "female"]
+      enum: ['male', 'female'],
     },
     password: {
       type: String,
       required: [true, '請輸入您的密碼'],
       minlength: 8,
-      select: false
+      select: false,
     },
     email: {
       type: String,
       required: [true, '請輸入您的 Email'],
       unique: true,
       lowercase: true,
-      select: false
+      select: false,
     },
     photo: {
-      type: String
+      type: String,
     },
-    googleId: String
+    googleId: String,
   },
   {
-    versionKey: false
-  });
+    versionKey: false,
+  }
+);
 
 const User = mongoose.model('user', userSchema);
 

@@ -1,20 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 //建立schema
 const postSchema = new mongoose.Schema(
   {
     content: {
       type: String,
-      required: [true, 'Content 未填寫']
+      required: [true, 'Content 未填寫'],
     },
     image: {
-      type:String,
-      default:""
+      type: String,
+      default: '',
     },
     createdAt: {
       type: Date,
       default: Date.now, //確保每筆資料時間不同
-      select: false
+      select: false,
     },
     // name: {
     //     type: String,
@@ -22,19 +22,19 @@ const postSchema = new mongoose.Schema(
     // },
     likes: {
       type: mongoose.Schema.ObjectId,
-      ref:'user',
+      ref: 'user',
     },
     user: {
       type: mongoose.Schema.ObjectId,
-      ref:'user',
-      required: [true, 'user ID 未填寫']
-    } 
+      ref: 'user',
+      required: [true, 'user ID 未填寫'],
+    },
   },
   {
-    versionKey: false
+    versionKey: false,
   }
-)
+);
 // 建立model
-const Post = mongoose.model('Post', postSchema)
+const Post = mongoose.model('Post', postSchema);
 
-module.exports = Post
+module.exports = Post;

@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 const config = {
   type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
@@ -15,8 +15,8 @@ const config = {
 };
 
 admin.initializeApp({
-    credential: admin.credential.cert(config),
-    storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
+  credential: admin.credential.cert(config),
+  storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
 });
 
 module.exports = admin;
