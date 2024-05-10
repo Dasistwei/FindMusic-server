@@ -3,6 +3,7 @@ const appError = require('../service/appError');
 const handleErrorAsync = require('../service/handleErrorAsync');
 const express = require('express');
 const User = require('../models/user');
+const Post = require('../models/post');
 
 const router = express.Router();
 const validator = require('validator');
@@ -136,15 +137,47 @@ router.put(
   })
 );
 
+//google 登入
 router.get(
   '/google',
   passport.authenticate('google', {
     scope: ['email', 'profile'],
   })
 );
-
 router.get('/google/callback', passport.authenticate('google', { session: false }), async (req, res) => {
   generateUrlJWT(req.user, res);
 });
 
+//user 貼文
+router.get(
+  '/posts',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const user = req.user[0].id;
+    const posts = await Post.find({ user });
+    handleSuccess(res, {
+      results: posts.length,
+      posts,
+    });
+  })
+);
+
+//user 按讚的所有貼文
+router.get(
+  '/getLikeList',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0].id;
+    const likeList = await Post.find({
+      likes: { $in: [userId] },
+    }).populate({
+      path: 'user',
+      select: 'name _id',
+    });
+    handleSuccess(res, likeList);
+  })
+);
+
+const init = async () => {};
+// init();
 module.exports = router;

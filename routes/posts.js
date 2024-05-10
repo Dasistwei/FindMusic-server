@@ -36,17 +36,17 @@ router.post(
   '/',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
-    const { content, image, name, likes, user } = req.body;
+    const { content, image } = req.body;
+    const { name, id } = req.user[0];
     // mongoose 錯誤
-    if (content === undefined || image === undefined || name === undefined || likes === undefined || user === undefined) {
-      return next(appError(400, '欄位填寫有誤', next));
-    }
+    // if (content === undefined || image === undefined || name === undefined || likes === undefined || user === undefined) {
+    //   return next(appError(400, '欄位填寫有誤', next));
+    // }
     const result = await Post.create({
       name,
       content: content.trim(),
       image,
-      likes,
-      user,
+      user: id,
     });
     handleSuccess(res, result);
   })
@@ -99,4 +99,55 @@ router.delete(
   })
 );
 
+//按讚
+router.post(
+  '/:id/likes',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    let postId = req.params.id;
+    let userId = req.user[0].id;
+
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: { likes: userId },
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    if (result !== null) {
+      handleSuccess(res, result);
+    }
+  })
+);
+
+// 收回讚
+router.delete(
+  '/:id/likes',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    let postId = req.params.id;
+    let userId = req.user[0].id;
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $pull: { likes: userId },
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    if (result !== null) {
+      handleSuccess(res, result);
+    }
+  })
+);
+
+const init = async () => {
+  console.log(result);
+};
+// init();
 module.exports = router;
