@@ -16,13 +16,10 @@ const postSchema = new mongoose.Schema(
       default: Date.now, //確保每筆資料時間不同
       select: false,
     },
-    // name: {
-    //     type: String,
-    //     required: [true, '貼文姓名未填寫']
-    // },
     likes: {
-      type: Number,
-      default: 0,
+      type: [mongoose.Schema.ObjectId],
+      ref: 'user',
+      default: [], // 设置默认值为空数组
     },
     user: {
       type: mongoose.Schema.ObjectId,

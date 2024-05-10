@@ -3,17 +3,19 @@ const appError = require('../service/appError');
 const handleErrorAsync = require('../service/handleErrorAsync');
 const express = require('express');
 const User = require('../models/user');
+const Post = require('../models/post');
 
 const router = express.Router();
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const handleSuccess = require('../service/handleSuccess');
-const { isAuth, generateSendJWT } = require('../service/auth');
+const { isAuth, generateSendJWT, generateUrlJWT } = require('../service/auth');
+const passport = require('passport');
 
 router.get(
   '/',
-  handleErrorAsync(async (req, res, next) => {
+  handleErrorAsync(async (req, res) => {
     const newUser = await User.find({});
     handleSuccess(res, newUser);
   })
@@ -103,7 +105,6 @@ router.post(
 );
 
 // 更新密碼
-// 要驗證是否登入
 router.put(
   '/update_password',
   isAuth,
@@ -113,7 +114,7 @@ router.put(
     if (password !== confirmPassword) {
       return next(appError(400, '請確認兩次都輸入相同密碼'));
     }
-    newPassword = await bcrypt.hash(password, 12);
+    let newPassword = await bcrypt.hash(password, 12);
     const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
       password: newPassword,
     });
@@ -127,17 +128,16 @@ router.put(
 router.get(
   '/profile',
   isAuth,
-  handleErrorAsync(async (req, res, next) => {
+  handleErrorAsync(async (req, res) => {
     handleSuccess(res, req.user);
   })
 );
 
 // 更新個人資料頁面
-// 要驗證是否登入
 router.put(
   '/update_profile',
   isAuth,
-  handleErrorAsync(async (req, res, next) => {
+  handleErrorAsync(async (req, res) => {
     let { photo, name, gender } = req.body;
     const updatedUser = await User.findByIdAndUpdate(
       req.user[0].id,
@@ -155,4 +155,47 @@ router.put(
   })
 );
 
+//google 登入
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['email', 'profile'],
+  })
+);
+router.get('/google/callback', passport.authenticate('google', { session: false }), async (req, res) => {
+  generateUrlJWT(req.user, res);
+});
+
+//user 貼文
+router.get(
+  '/posts',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const user = req.user[0].id;
+    const posts = await Post.find({ user });
+    handleSuccess(res, {
+      results: posts.length,
+      posts,
+    });
+  })
+);
+
+//user 按讚的所有貼文
+router.get(
+  '/getLikeList',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0].id;
+    const likeList = await Post.find({
+      likes: { $in: [userId] },
+    }).populate({
+      path: 'user',
+      select: 'name _id',
+    });
+    handleSuccess(res, likeList);
+  })
+);
+
+const init = async () => {};
+// init();
 module.exports = router;

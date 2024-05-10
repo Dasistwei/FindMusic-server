@@ -7,6 +7,7 @@ const cors = require('cors');
 
 //DB
 require('./connections/mongoose');
+require('./connections/passport');
 
 // 捕捉預期外的錯誤
 process.on('uncaughtException', (err) => {
@@ -21,6 +22,7 @@ const httpController = require('./controllers/http');
 var indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
+const uploadRouter = require('./routes/upload');
 
 var app = express();
 
@@ -34,10 +36,18 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
+app.use('/upload', uploadRouter);
+
 app.use(httpController.pageNotFound);
 
+// 補捉程式錯誤
+process.on('uncaughtException', (err) => {
+  // 記錄錯誤下來，等到服務都處理完後，停掉該 process
+  console.error('Uncaughted Exception！');
+  console.error(err);
+  process.exit(1);
+});
 const resErrorProd = (err, res) => {
-  console.log('err', err);
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.statusCode,

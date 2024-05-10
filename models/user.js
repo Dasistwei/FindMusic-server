@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema(
     photo: {
       type: String,
     },
+    googleId: String,
   },
   {
     versionKey: false,
