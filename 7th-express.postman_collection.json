@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "bb556c76-144b-4def-8b97-fb679fea1cbc",
+		"name": "7th-express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29633823"
+	},
+	"item": [
+		{
+			"name": "新增會員",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"s131dssss1sssesds3s@wmail.com\",    \n    \"name\": \"ki\",\n    \"password\": \"000000s00\",\n    \"confirmPassword\": \"000000s00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/users/sign_up",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"sign_up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得會員",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Bobw\",\n    \"password\": \"00000000\",\n    \"confirmPassword\": \"00000000\",\n    \"email\":\"123fww45ss6ssqe7@mail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/users",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload to firebase",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"uuid": "dc47b415-94fb-4ccf-ba60-dcd78c15965f"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/upload/image",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"upload",
+						"image"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
