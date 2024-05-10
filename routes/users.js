@@ -47,12 +47,13 @@ router.post(
       return next(appError(400, '暱稱 name 長度需至少 2 個字元以上'));
     }
 
-    // 密碼必須大於八碼
+    // 密碼必須英數混合和 8 碼以上
     if (
       !validator.isStrongPassword(password, {
         minLength: 8,
         minUppercase: 0,
         minNumbers: 1,
+        minLowercase: 1,
         minSymbols: 0,
       })
     ) {
@@ -76,7 +77,7 @@ router.post(
 );
 
 // 登入
-router.get(
+router.post(
   '/sign_in',
   handleErrorAsync(async (req, res, next) => {
     let { email, password } = req.body;
