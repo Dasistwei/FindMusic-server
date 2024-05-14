@@ -102,6 +102,9 @@ app.use((err, req, res, next) => {
   resErrorProd(err, res);
 });
 
+// process.on('warning', (warning) => {
+//   console.log('warning', warning.stack);
+// });
 // 補捉未處理的 catch
 process.on('unhandledRejection', (reason, promise) => {
   console.error('未捕捉到的 rejection：', promise, '原因：', reason);
