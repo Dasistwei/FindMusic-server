@@ -21,10 +21,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/users/sign_up",
+					"raw": "http://localhost:8000/users/sign_up",
+					"protocol": "http",
 					"host": [
-						"{{URL}}"
+						"localhost"
 					],
+					"port": "8000",
 					"path": [
 						"users",
 						"sign_up"
@@ -51,10 +53,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/users",
+					"raw": "http://localhost:8000/users",
+					"protocol": "http",
 					"host": [
-						"{{URL}}"
+						"localhost"
 					],
+					"port": "8000",
 					"path": [
 						"users"
 					]
@@ -79,15 +83,17 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": []
+							"src": "postman-cloud:///1ef0b971-c71c-4500-b370-ad678ea4c29e"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{URL}}/upload/image",
+					"raw": "http://localhost:8000/upload/image",
+					"protocol": "http",
 					"host": [
-						"{{URL}}"
+						"localhost"
 					],
+					"port": "8000",
 					"path": [
 						"upload",
 						"image"
