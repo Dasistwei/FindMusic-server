@@ -46,7 +46,7 @@ router.post(
   isAuth,
   upload,
   handleErrorAsync(async (req, res, next) => {
-    if (!req.files.length) {
+    if (req.files === undefined || !req.files.length) {
       return next(appError(400, '尚未上傳檔案'));
     }
     const file = req.files[0];
@@ -63,13 +63,13 @@ router.post(
       };
       // 取得檔案的網址
       blob.getSignedUrl(config, (err, imgUrl) => {
-        handleSuccess(res, imgUrl);
+        return handleSuccess(res, imgUrl);
       });
     });
 
     // 如果上傳過程中發生錯誤，會觸發 error 事件
     blobStream.on('error', (err) => {
-      next(appError(500, '上傳失敗'));
+      return next(appError(500, '上傳失敗'));
     });
 
     // 將檔案的 buffer 寫入 blobStream
