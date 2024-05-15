@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-//建立schema user id /post id
+//建立schema user id /post id 一對多(collection)
 const commentSchema = new mongoose.Schema(
   {
     comment: {
@@ -15,12 +15,12 @@ const commentSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'user',
-      // required: [true, 'user ID 未填寫'],
+      required: [true, 'user ID 未填寫'],
     },
     post: {
       type: mongoose.Schema.ObjectId,
       ref: 'post',
-      // required: [true, 'post ID 未填寫'],
+      required: [true, 'post ID 未填寫'],
     },
   },
   {

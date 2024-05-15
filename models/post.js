@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     likes: {
       type: [mongoose.Schema.ObjectId],
       ref: 'user',
-      default: [], // 设置默认值为空数组
+      default: [], // 设置默认值为空数组 一對多(欄位)
     },
     user: {
       type: mongoose.Schema.ObjectId,
