@@ -26,34 +26,33 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     googleId: String,
-    // likes: {
-    //   type: [mongoose.Schema.ObjectId],
-    //   ref: 'user',
-    //   default: [], // 设置默认值为空数组 一對多(欄位)
-    // },
     // 多對多
-    followers: {
-      user: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'user',
+    followers: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'user',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now, //確保每筆資料時間不同
+        },
+        // _id: false,
       },
-      createdAt: {
-        type: Date,
-        default: Date.now, //確保每筆資料時間不同
+    ],
+    following: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'user',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now, //確保每筆資料時間不同
+        },
+        // _id: false,
       },
-      default: [],
-    },
-    following: {
-      user: {
-        type: [mongoose.Schema.ObjectId],
-        ref: 'user',
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now, //確保每筆資料時間不同
-      },
-      default: [],
-    },
+    ],
   },
   {
     versionKey: false,

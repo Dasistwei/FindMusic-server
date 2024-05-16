@@ -105,14 +105,26 @@ router.post(
 );
 
 // 更新密碼
-router.put(
-  '/update_password',
+router.patch(
+  '/updatePassword',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
     let { password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
       return next(appError(400, '請確認兩次都輸入相同密碼'));
+    }
+    // 密碼必須英數混合和 8 碼以上
+    if (
+      !validator.isStrongPassword(password, {
+        minLength: 8,
+        minUppercase: 0,
+        minNumbers: 1,
+        minLowercase: 1,
+        minSymbols: 0,
+      })
+    ) {
+      return next(appError(400, '密碼必須英數混合和 8 碼以上', next));
     }
     let newPassword = await bcrypt.hash(password, 12);
     const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
@@ -134,8 +146,8 @@ router.get(
 );
 
 // 更新個人資料頁面
-router.put(
-  '/update_profile',
+router.patch(
+  '/profile',
   isAuth,
   handleErrorAsync(async (req, res) => {
     let { photo, name, gender } = req.body;
@@ -209,26 +221,33 @@ router.post(
     if (user === userToFollow) {
       return next(appError(400, '您不能追蹤自己'));
     }
-    const result = await User.findByIdAndUpdate(
-      user,
+
+    await User.updateOne(
       {
-        $addToSet: { following: userToFollow },
+        _id: user,
+        'following.user': { $ne: userToFollow },
+      },
+      {
+        $addToSet: { following: { user: userToFollow } },
       },
       {
         new: true,
       }
     );
-    const result2 = await User.findByIdAndUpdate(
-      userToFollow,
+
+    await User.updateOne(
       {
-        $addToSet: { followers: user },
+        _id: userToFollow,
+        'followers.user': { $ne: user },
+      },
+      {
+        $addToSet: { followers: { user } },
       },
       {
         new: true,
       }
     );
     handleSuccess(res, '追蹤成功');
-    // handleSuccess(res, { result, result2 });
   })
 );
 //取消追蹤
@@ -238,67 +257,52 @@ router.delete(
   handleErrorAsync(async (req, res, next) => {
     const user = req.user[0].id;
     const userToUnFollow = req.params.id;
-    console.log(user, userToUnFollow);
+
     if (user === userToUnFollow) {
       return next(appError(400, '您不能取消追蹤自己'));
     }
-    const result = await User.findByIdAndUpdate(
-      user,
+
+    await User.updateOne(
       {
-        $pull: { following: userToUnFollow },
+        _id: user,
       },
       {
-        new: true,
+        $pull: { following: { user: userToUnFollow } },
       }
     );
-    const result2 = await User.findByIdAndUpdate(
-      userToUnFollow,
+
+    await User.updateOne(
       {
-        $pull: { followers: user },
+        _id: userToUnFollow,
       },
       {
-        new: true,
+        $pull: { followers: { user } },
       }
     );
     handleSuccess(res, '成功取消追蹤');
-    // handleSuccess(res, { result, result2 });
   })
 );
+//追蹤名單
+router.get(
+  '/following',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0].id;
+    const following = await User.findById(userId).populate({
+      path: 'following.user',
+      select: 'name', // Only select the 'name' field from the populated user documents
+    });
+    console.log(following);
+    handleSuccess(res, following);
+  })
+);
+// console.log(user);
 
 const init = async () => {
-  // const user = '66448810ff0006fe59d61d10';
-  // const userToFollow = '663e3e2d59e3ff9d9e78f6b6';
-  // const result = await Post.findByIdAndUpdate(
-  //   postId,
-  //   {
-  //     $push: { likes: userId },
-  //   },
-  //   {
-  //     runValidators: true,
-  //     new: true,
-  //   }
-  // );
-  const result = await User.findByIdAndUpdate(
-    user,
-    {
-      $push: { following: userToFollow },
-    },
-    {
-      // runValidators: true,
-      new: true,
-    }
-  );
-  const result2 = await User.findByIdAndUpdate(
-    userToFollow,
-    {
-      $push: { followers: user },
-    },
-    {
-      new: true,
-    }
-  );
-  // console.log(result, result2);
-  // console.log(result);
+  const user = await User.findById(userId).populate('following.user');
+
+  // console.log(currentUseruser.following);
+  console.log(user);
 };
 // init();
 

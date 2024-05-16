@@ -75,7 +75,7 @@ const resErrorDev = (err, res) => {
 //攔截程式碼錯誤
 app.use((err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-
+  // console.log('****************', err.name);
   if (process.env.NODE_ENV == 'dev' && err.name === 'SyntaxError') {
     err.message = 'Unexpected end of JSON input';
     return resErrorDev(err, res);
@@ -95,6 +95,11 @@ app.use((err, req, res, next) => {
     return resErrorProd(err, res);
   } else if (err.name === 'CastError') {
     err.message = '找不到此貼文';
+    err.statusCode = 400;
+    err.isOperational = true;
+    return resErrorProd(err, res);
+  } else if (err.name === 'JsonWebTokenError') {
+    err.message = '請登入';
     err.statusCode = 400;
     err.isOperational = true;
     return resErrorProd(err, res);

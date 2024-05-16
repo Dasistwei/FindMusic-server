@@ -37,7 +37,7 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
     token = req.headers.authorization.split(' ')[1];
   }
   if (!token) {
-    return next(appError(401, '請登入', next));
+    return next(appError(401, '請登入'));
   }
   //驗證密碼
   const decode = await new Promise((resolve, reject) => {
