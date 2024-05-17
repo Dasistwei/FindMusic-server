@@ -105,8 +105,8 @@ router.post(
 );
 
 // 更新密碼
-router.put(
-  '/update_password',
+router.patch(
+  '/updatePassword',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
     let { password, confirmPassword } = req.body;
