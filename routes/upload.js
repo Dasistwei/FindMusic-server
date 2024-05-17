@@ -13,6 +13,7 @@ const bucket = firebaseAdmin.storage().bucket();
 // CommonJS syntax
 const { ImgurClient } = require('imgur');
 const sizeOf = require('image-size');
+const User = require('../models/user');
 
 router.post(
   '/',

@@ -134,8 +134,8 @@ router.get(
 );
 
 // 更新個人資料頁面
-router.put(
-  '/update_profile',
+router.patch(
+  '/profile',
   isAuth,
   handleErrorAsync(async (req, res) => {
     let { photo, name, gender } = req.body;
@@ -196,6 +196,10 @@ router.get(
   })
 );
 
-const init = async () => {};
-// init();
 module.exports = router;
+
+const init = async () => {
+  const user = await User.findById('66448810ff0006fe59d61d10');
+  console.log(user);
+};
+// init();
