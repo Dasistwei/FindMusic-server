@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Post = require('../models/post');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 const { isAuth } = require('../service/auth');
 
 const handleSuccess = require('../service/handleSuccess');
@@ -12,6 +13,7 @@ const handleErrorAsync = require('../service/handleErrorAsync');
 // GET all posts
 // 設計貼文的 GET API，並需設計篩選功能(從新到舊貼文、從舊到最新、關鍵字搜尋)
 // 檢查會員是否登入
+// 取得留言
 router.get(
   '/',
   isAuth,
@@ -23,12 +25,29 @@ router.get(
         path: 'user',
         select: 'name photo',
       })
+      .populate({
+        path: 'comments',
+        select: 'comment user',
+      })
       .sort(timeSort);
 
     handleSuccess(res, posts);
   })
 );
-
+// GET single posts
+// 設計貼文的 GET API，並需設計篩選功能(從新到舊貼文、從舊到最新、關鍵字搜尋)
+// 檢查會員是否登入
+// 取得留言
+router.get(
+  '/:id',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    // console.log(req.params.id);
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+    handleSuccess(res, post);
+  })
+);
 // POST
 // 設計貼文 POST API，圖片先傳固定 url
 // 檢查會員是否登入
@@ -146,8 +165,30 @@ router.delete(
   })
 );
 
+// 新增留言
+router.post(
+  '/:id/comment',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const post = req.params.id;
+    const user = req.user[0].id;
+    const comment = req.body.comment;
+
+    const newComment = await Comment.create({
+      user,
+      post,
+      comment,
+    });
+    // console.log();
+    handleSuccess(res, newComment);
+  })
+);
+
 const init = async () => {
-  console.log(result);
+  const postId = '664208f6a958242669a1dabf';
+  const user = '6641d330d171bdd95cda9688';
+  const post = await Post.findById(postId);
+  console.log(post);
 };
 // init();
 module.exports = router;

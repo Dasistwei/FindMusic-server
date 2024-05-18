@@ -114,6 +114,18 @@ router.patch(
     if (password !== confirmPassword) {
       return next(appError(400, '請確認兩次都輸入相同密碼'));
     }
+    // 密碼必須英數混合和 8 碼以上
+    if (
+      !validator.isStrongPassword(password, {
+        minLength: 8,
+        minUppercase: 0,
+        minNumbers: 1,
+        minLowercase: 1,
+        minSymbols: 0,
+      })
+    ) {
+      return next(appError(400, '密碼必須英數混合和 8 碼以上', next));
+    }
     let newPassword = await bcrypt.hash(password, 12);
     const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
       password: newPassword,

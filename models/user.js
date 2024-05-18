@@ -26,6 +26,33 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     googleId: String,
+    // 多對多
+    followers: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'user',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now, //確保每筆資料時間不同
+        },
+        // _id: false,
+      },
+    ],
+    following: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'user',
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now, //確保每筆資料時間不同
+        },
+        // _id: false,
+      },
+    ],
   },
   {
     versionKey: false,
