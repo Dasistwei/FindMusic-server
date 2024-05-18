@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "d8912807-2701-4947-aa4b-11cf8678ab0e",
+		"name": "8th-express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29633823"
+	},
+	"item": [
+		{
+			"name": "會員功能",
+			"item": [
+				{
+					"name": "註冊會員",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"8th@ewmai.com\",    \n    \"name\": \"8th\",\n    \"password\": \"000000s00\",\n    \"confirmPassword\": \"000000s00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/sign_up",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "登入會員",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"8th@ewmai.com\",    \n    \"password\": \"000000s00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/sign_in",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "重設密碼",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "73d4c30a-ecfd-4130-a0ad-02fbcb23ce6c"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"0000000012ewe\",\n    \"confirmPassword\": \"0000000012ewe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/updatePassword",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"updatePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得個人資料",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "5e9c04e4-13ef-468a-8f15-7cdee4faacb9",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"00000000\",\n    \"email\":\"123fww45ss6ssqe7d@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/profile",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新個人資料",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "140877dd-76cd-4553-af78-58655b2cb5ac"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bobws1\",\n    \"gender\": \"male2\",\n    \"photo\": \"urlXXXXX\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/profile",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "會員按讚追蹤動態",
+			"item": [
+				{
+					"name": "追蹤朋友",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "be719991-6841-4b83-8d7a-74e83882f765"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/{{follow_id}}/follow",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"{{follow_id}}",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取消追蹤",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "2e87c110-84ee-4867-b57f-75df1d8920f8"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/{{follow_id}}/unfollow",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"{{follow_id}}",
+								"unfollow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得個人按讚列表",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "5dccabef-d6a7-467c-9928-a2b0d50a8a00"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/getLikeList",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"getLikeList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得個人追蹤名單",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "28a81f79-ca49-48fe-b88e-e2196b020ae5"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/following",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"following"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "動態貼文",
+			"item": [
+				{
+					"name": "取得所有貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "282c2ba6-a0a3-45ac-b0ed-1afeb41c02d4"
+							}
+						],
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得單筆貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "58a50f78-82c9-4aa1-9f3d-7d088509a93b"
+							}
+						],
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/posts/{{post_id}}",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts",
+								"{{post_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增貼文",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "8d5b7c8a-58ce-483d-93fd-bd499f78b2b7"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"新增貼文2\",\n    \"image\": \"https://thumb.fakeface.rest/thumb_female_27_5a94a297efb15caf0e3d769ce1694953e8bf33e2.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/posts",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按讚功能",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "ec83c2f0-c7e8-42f5-a29f-0d070a540694"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/posts/{{post_id}}/likes",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts",
+								"{{post_id}}",
+								"likes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "收回讚功能",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "ba29af41-ebdf-425b-9932-7d4b81d5dc9f"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/posts/{{post_id}}/likes",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"posts",
+								"{{post_id}}",
+								"likes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增留言",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "d2813d72-3bd9-472d-80ac-6e45d45c507e"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comment\": \"讚喔!!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/posts/{{post_id}}/comment",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"posts",
+								"{{post_id}}",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "個人全部貼文",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "ef23f953-abbd-4b9c-8d61-f675c328fc34"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://fiveth-express.onrender.com/users/posts",
+							"protocol": "https",
+							"host": [
+								"fiveth-express",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"users",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "其他api",
+			"item": [
+				{
+					"name": "upload to firebase",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"uuid": "b9351cba-de42-4c76-9d74-fbffa87eb146"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1ef0b9d9-dd22-4260-ba18-b5a86246a2b9"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/upload/image",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"upload",
+								"image"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
