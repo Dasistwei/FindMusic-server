@@ -207,6 +207,7 @@ router.get(
     handleSuccess(res, likeList);
   })
 );
+
 //追蹤
 router.post(
   '/:id/follow',
@@ -220,26 +221,33 @@ router.post(
     if (user === userToFollow) {
       return next(appError(400, '您不能追蹤自己'));
     }
-    const result = await User.findByIdAndUpdate(
-      user,
+
+    await User.updateOne(
       {
-        $addToSet: { following: userToFollow },
+        _id: user,
+        'following.user': { $ne: userToFollow },
+      },
+      {
+        $addToSet: { following: { user: userToFollow } },
       },
       {
         new: true,
       }
     );
-    const result2 = await User.findByIdAndUpdate(
-      userToFollow,
+
+    await User.updateOne(
       {
-        $addToSet: { followers: user },
+        _id: userToFollow,
+        'followers.user': { $ne: user },
+      },
+      {
+        $addToSet: { followers: { user } },
       },
       {
         new: true,
       }
     );
     handleSuccess(res, '追蹤成功');
-    // handleSuccess(res, { result, result2 });
   })
 );
 //取消追蹤
@@ -249,36 +257,53 @@ router.delete(
   handleErrorAsync(async (req, res, next) => {
     const user = req.user[0].id;
     const userToUnFollow = req.params.id;
-    console.log(user, userToUnFollow);
+
     if (user === userToUnFollow) {
       return next(appError(400, '您不能取消追蹤自己'));
     }
-    const result = await User.findByIdAndUpdate(
-      user,
+
+    await User.updateOne(
       {
-        $pull: { following: userToUnFollow },
+        _id: user,
       },
       {
-        new: true,
+        $pull: { following: { user: userToUnFollow } },
       }
     );
-    const result2 = await User.findByIdAndUpdate(
-      userToUnFollow,
+
+    await User.updateOne(
       {
-        $pull: { followers: user },
+        _id: userToUnFollow,
       },
       {
-        new: true,
+        $pull: { followers: { user } },
       }
     );
     handleSuccess(res, '成功取消追蹤');
-    // handleSuccess(res, { result, result2 });
   })
 );
-module.exports = router;
+//追蹤名單
+router.get(
+  '/following',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0].id;
+    const following = await User.findById(userId).populate({
+      path: 'following.user',
+      select: 'name', // Only select the 'name' field from the populated user documents
+    });
+    console.log(following);
+    handleSuccess(res, following);
+  })
+);
+// console.log(user);
 
 const init = async () => {
-  const user = await User.findById('66448810ff0006fe59d61d10');
+  const user = await User.findById(userId).populate('following.user');
+
+  // console.log(currentUseruser.following);
   console.log(user);
 };
 // init();
+
+module.exports = router;

@@ -75,7 +75,7 @@ const resErrorDev = (err, res) => {
 //攔截程式碼錯誤
 app.use((err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-
+  console.log('********', err);
   if (process.env.NODE_ENV === 'dev' && err.name === 'SyntaxError') {
     err.message = 'Unexpected end of JSON input';
     return resErrorDev(err, res);
