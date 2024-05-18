@@ -207,7 +207,74 @@ router.get(
     handleSuccess(res, likeList);
   })
 );
-
+//追蹤
+router.post(
+  '/:id/follow',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const user = req.user[0].id;
+    const userToFollow = req.params.id;
+    // console.log('req', req.params.id);
+    // 使用者 model following 欄位寫入 following user id
+    // 被追蹤 model follower [] 欄位寫入 follower user id
+    if (user === userToFollow) {
+      return next(appError(400, '您不能追蹤自己'));
+    }
+    const result = await User.findByIdAndUpdate(
+      user,
+      {
+        $addToSet: { following: userToFollow },
+      },
+      {
+        new: true,
+      }
+    );
+    const result2 = await User.findByIdAndUpdate(
+      userToFollow,
+      {
+        $addToSet: { followers: user },
+      },
+      {
+        new: true,
+      }
+    );
+    handleSuccess(res, '追蹤成功');
+    // handleSuccess(res, { result, result2 });
+  })
+);
+//取消追蹤
+router.delete(
+  '/:id/unfollow',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const user = req.user[0].id;
+    const userToUnFollow = req.params.id;
+    console.log(user, userToUnFollow);
+    if (user === userToUnFollow) {
+      return next(appError(400, '您不能取消追蹤自己'));
+    }
+    const result = await User.findByIdAndUpdate(
+      user,
+      {
+        $pull: { following: userToUnFollow },
+      },
+      {
+        new: true,
+      }
+    );
+    const result2 = await User.findByIdAndUpdate(
+      userToUnFollow,
+      {
+        $pull: { followers: user },
+      },
+      {
+        new: true,
+      }
+    );
+    handleSuccess(res, '成功取消追蹤');
+    // handleSuccess(res, { result, result2 });
+  })
+);
 module.exports = router;
 
 const init = async () => {
