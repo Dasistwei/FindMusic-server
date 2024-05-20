@@ -103,6 +103,11 @@ app.use((err, req, res, next) => {
     err.statusCode = 400;
     err.isOperational = true;
     return resErrorProd(err, res);
+  } else if (err.name === 'MulterError') {
+    err.message = '圖片不能大於 2MB';
+    err.statusCode = 400;
+    err.isOperational = true;
+    return resErrorProd(err, res);
   }
   resErrorProd(err, res);
 });
