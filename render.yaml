@@ -1,0 +1,5 @@
+services:
+  # 添加静态文件服务配置
+  staticDirs:
+    - sourceDir: uploads
+      basePath: /upload/sounds
