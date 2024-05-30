@@ -23,6 +23,7 @@ var indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
 const uploadRouter = require('./routes/upload');
+const spotifyRouter = require('./routes/spotify');
 
 var app = express();
 
@@ -37,9 +38,13 @@ app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/upload', uploadRouter);
+app.use('/spotify', spotifyRouter);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.use(httpController.pageNotFound);
-
+// console.log(process.env.SPOTIFY_REDIRECT_URI, process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET);
 // 補捉程式錯誤
 process.on('uncaughtException', (err) => {
   // 記錄錯誤下來，等到服務都處理完後，停掉該 process
@@ -75,7 +80,7 @@ const resErrorDev = (err, res) => {
 //攔截程式碼錯誤
 app.use((err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-  console.log('********', err);
+  // console.log('********', err);
   if (process.env.NODE_ENV === 'dev' && err.name === 'SyntaxError') {
     err.message = 'Unexpected end of JSON input';
     return resErrorDev(err, res);
@@ -106,6 +111,11 @@ app.use((err, req, res, next) => {
   } else if (err.name === 'MulterError') {
     err.message = '圖片不能大於 2MB';
     err.statusCode = 400;
+    err.isOperational = true;
+    return resErrorProd(err, res);
+  }
+  if (err.name === 'WebapiAuthenticationError') {
+    err.message = '請重新登入spotify';
     err.isOperational = true;
     return resErrorProd(err, res);
   }

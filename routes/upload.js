@@ -10,6 +10,10 @@ const { v4: uuid4 } = require('uuid');
 const firebaseAdmin = require('../connections/firebase');
 const bucket = firebaseAdmin.storage().bucket();
 
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
+const uploadSounds = multer({ dest: 'uploads/' })
 // CommonJS syntax
 const { ImgurClient } = require('imgur');
 const sizeOf = require('image-size');
@@ -77,5 +81,23 @@ router.post(
     blobStream.end(file.buffer);
   })
 );
+router.post(
+  '/sounds',
+  // isAuth,
+  uploadSounds.single('audio'),
+  handleErrorAsync(async (req, res, next) => {
+    const file = req.file
+    if (!file) {
+      return next(appError(400, '無音檔上傳'))
+    }
+    const newFileName = `${file.filename}.mp3`
+    fs.renameSync(file.path, path.join('uploads', newFileName));
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${newFileName}`;
+    console.log('fileUrl', fileUrl)
+    res.json({ fileUrl });
+    handleSuccess(res, 'sounds')
+  })
+);
 
+// console.log()
 module.exports = router;
