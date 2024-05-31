@@ -1,9 +1,13 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 require('dotenv').config({ path: './config.env' });
 const cors = require('cors');
+
+// const schedule = require('node-schedule');
+// const fs = require('fs');
+
 
 //DB
 require('./connections/mongoose');
@@ -25,6 +29,9 @@ const usersRouter = require('./routes/users');
 const uploadRouter = require('./routes/upload');
 const spotifyRouter = require('./routes/spotify');
 
+//jobs
+require('./jobs/cleanUploads')
+
 var app = express();
 
 app.use(logger('dev'));
@@ -41,7 +48,6 @@ app.use('/upload', uploadRouter);
 app.use('/spotify', spotifyRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 
 app.use(httpController.pageNotFound);
 // console.log(process.env.SPOTIFY_REDIRECT_URI, process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET);
