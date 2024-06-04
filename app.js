@@ -5,9 +5,6 @@ const logger = require('morgan');
 require('dotenv').config({ path: './config.env' });
 const cors = require('cors');
 
-// const schedule = require('node-schedule');
-// const fs = require('fs');
-
 
 //DB
 require('./connections/mongoose');
@@ -27,7 +24,6 @@ var indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
 const uploadRouter = require('./routes/upload');
-const spotifyRouter = require('./routes/spotify');
 
 //jobs
 require('./jobs/cleanUploads')
@@ -45,7 +41,6 @@ app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/upload', uploadRouter);
-app.use('/spotify', spotifyRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -117,11 +112,6 @@ app.use((err, req, res, next) => {
   } else if (err.name === 'MulterError') {
     err.message = '圖片不能大於 2MB';
     err.statusCode = 400;
-    err.isOperational = true;
-    return resErrorProd(err, res);
-  }
-  if (err.name === 'WebapiAuthenticationError') {
-    err.message = '請重新登入spotify';
     err.isOperational = true;
     return resErrorProd(err, res);
   }
