@@ -23,6 +23,7 @@ const httpController = require('./controllers/http');
 var indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const tracksRouter = require('./routes/tracks');
+const collectionsRouter = require('./routes/collections');
 const usersRouter = require('./routes/users');
 const uploadRouter = require('./routes/upload');
 
@@ -41,6 +42,7 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/tracks', tracksRouter);
+app.use('/collections', collectionsRouter);
 app.use('/users', usersRouter);
 app.use('/upload', uploadRouter);
 

@@ -26,10 +26,9 @@ const generateUrlJWT = (user, res) => {
     expiresIn: process.env.JWT_EXPIRES_DAY,
   });
   user.password = undefined;
-
-  res.redirect(`${process.env.GOOGLE_JWT_REDIRECT_URL}?token=${token}&name=${user.name}`);
+  // res.redirect(`${process.env.GOOGLE_JWT_REDIRECT_URL}?token=${token}&name=${user.name}`);
+  res.redirect(`${process.env.GOOGLE_JWT_REDIRECT_URL}?token=${token}`);
 };
-
 const isAuth = handleErrorAsync(async (req, res, next) => {
   //驗證token
   let token;

@@ -81,9 +81,11 @@ router.post(
     blobStream.end(file.buffer);
   })
 );
+
+//產生audio url
 router.post(
   '/sounds',
-  // isAuth,
+  isAuth,
   uploadSounds.single('audio'),
   handleErrorAsync(async (req, res, next) => {
     const file = req.file
@@ -93,7 +95,6 @@ router.post(
     const newFileName = `${file.filename}.mp3`
     fs.renameSync(file.path, path.join('uploads', newFileName));
     const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${newFileName}`;
-    console.log('fileUrl', fileUrl)
     res.json({ fileUrl });
     handleSuccess(res, 'sounds')
   })

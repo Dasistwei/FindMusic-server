@@ -29,6 +29,7 @@ router.get(
   '/getLikeList',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    console.log("********************************", req)
     const userId = req.user[0].id;
     const likeList = await Track.find({
       likedBy: { $in: [userId] },
@@ -44,6 +45,7 @@ router.post(
   handleErrorAsync(async (req, res, next) => {
     const trackId = req.params.id
     let userId = req.user[0].id;
+    console.log('userId: ', userId)
     let result;
     result = await Track.findByIdAndUpdate(
       trackId,

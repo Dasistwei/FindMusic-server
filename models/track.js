@@ -50,6 +50,7 @@ const trackSchema = new mongoose.Schema(
       default: [], // 设置默认值为空数组 一對多(欄位)
     },
   },
+  { versionKey: false }
   // {
   //   versionKey: false,
   //   toJSON: { virtuals: true },

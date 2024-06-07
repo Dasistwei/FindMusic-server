@@ -125,7 +125,7 @@ router.post(
   handleErrorAsync(async (req, res, next) => {
     let postId = req.params.id;
     let userId = req.user[0].id;
-
+    console.log('userId', userId)
     const result = await Post.findByIdAndUpdate(
       postId,
       {
