@@ -12,12 +12,15 @@ const collectionSchema = new mongoose.Schema(
       default: Date.now, //確保每筆資料時間不同
       select: false,
     },
-    tracks: {
-      // type: [mongoose.Schema.ObjectId],
-      // ref: 'track',
-      type: [String],
-      default: [], // 设置默认值为空数组 一對多(欄位)
-    },
+    tracks: [
+      {
+        track: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'track',
+        }
+        // type: [String],
+      }
+    ],
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'user',

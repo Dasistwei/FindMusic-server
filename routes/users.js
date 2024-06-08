@@ -292,7 +292,6 @@ router.get(
       path: 'following.user',
       select: 'name', // Only select the 'name' field from the populated user documents
     });
-    console.log(following);
     handleSuccess(res, following);
   })
 );

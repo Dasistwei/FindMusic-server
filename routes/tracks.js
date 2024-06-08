@@ -29,7 +29,6 @@ router.get(
   '/getLikeList',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
-    console.log("********************************", req)
     const userId = req.user[0].id;
     const likeList = await Track.find({
       likedBy: { $in: [userId] },
@@ -45,24 +44,23 @@ router.post(
   handleErrorAsync(async (req, res, next) => {
     const trackId = req.params.id
     let userId = req.user[0].id;
-    console.log('userId: ', userId)
     let result;
-    result = await Track.findByIdAndUpdate(
-      trackId,
+    result = await Track.findOneAndUpdate(
+      { trackId: trackId },
       {
-        $push: { likedBy: userId },
+        $addToSet: { likedBy: userId }
       },
       {
         runValidators: true,
-        new: true,
       }
     );
 
+    if (result !== null) return
     if (result === null) {
       if (!req.body.uri.startsWith("spotify:track")) return
-      const trackId = req.body.uri.split(":").pop()
+      // const trackId = req.body.uri.split(":").pop()
       result = await Track.create({
-        _id: trackId,
+        trackId: trackId,
         artists: req.body.artists,
         artistsUri: req.body.artistsUri,
         title: req.body.title,

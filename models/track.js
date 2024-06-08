@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 //建立schema
 const trackSchema = new mongoose.Schema(
   {
-    _id: {
+    trackId: {
       type: String,
       required: [true, '_id 未填寫'],
     },
