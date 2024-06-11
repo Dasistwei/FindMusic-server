@@ -12,15 +12,7 @@ const collectionSchema = new mongoose.Schema(
       default: Date.now, //確保每筆資料時間不同
       select: false,
     },
-    tracks: [
-      {
-        track: {
-          type: mongoose.Schema.ObjectId,
-          ref: 'track',
-        }
-        // type: [String],
-      }
-    ],
+    tracks: [String],
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'user',

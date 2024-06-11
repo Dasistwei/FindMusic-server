@@ -15,7 +15,6 @@ router.get(
   '/',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
-    // console.log('req.user ', req.user)
     const userId = req.user[0].id
     const collections = await Collection.find({ user: userId })
       .select('_id name')
@@ -99,8 +98,8 @@ router.post(
     //     runValidators: true,
     //   }
     // );
-    const result = await Collection.findOneAndUpdate(
-      { _id: collectionId },
+    const result = await Collection.findByIdAndUpdate(
+      collectionId,
       {
         $addToSet: { tracks: trackId }
       },
@@ -109,7 +108,7 @@ router.post(
         // new: true,
       }
     );
-    console.log("result: *************************************", result)
+    // console.log("result: *************************************", result)
     if (result !== null) {
       handleSuccess(res, 'result');
     }
@@ -172,8 +171,8 @@ router.delete(
 const init = async () => {
   const req = {
     body: {
-      trackId: '4QyX8CBSjqqqcoq4iMZuvifsssysF900',
-      collectionId: '6661e38725715e04b9ddec70'
+      trackId: '0mflMxspEfB0VbI1kyLiAv',
+      collectionId: '6666e0d8fb3dd067c30d85d3'
     }
   }
   try {
@@ -181,7 +180,7 @@ const init = async () => {
     const result = await Collection.findByIdAndUpdate(
       collectionId,
       {
-        $push: { tracks: new mongoose.Types.ObjectId(trackId) },
+        $addToSet: { tracks: trackId }
       },
       {
         runValidators: true,
