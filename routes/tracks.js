@@ -98,14 +98,72 @@ router.delete(
   })
 );
 
+//新增近期搜尋 track
+router.post(
+  '/recentSearch',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0]._id
+    const trackId = req.body.trackId
+    console.log('use', req.body.trackId)
+    if (!trackId) {
+      return next(appError(400, '請傳入歌曲資訊'))
+    }
+
+    const result = await User.findByIdAndUpdate(
+      userId,
+      {
+        $addToSet: { recentSearch: trackId },
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    )
+    // 限制数组长度为 6
+    const trimmedResult = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: { recentSearch: { $each: [], $slice: -6 } }, // 切片操作，保留最后 6 个元素
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    // console.log('result: ', result);
+    handleSuccess(res, trimmedResult.recentSearch)
+  })
+);
+//取得近期搜尋 track
+router.get(
+  '/recentSearch',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const userId = req.user[0]._id
+    const result = await User.findById(userId)
+      .select('recentSearch')
+    handleSuccess(res, result.recentSearch);
+  })
+);
 
 const init = async () => {
   try {
-    // let trackId = '000'
-    let userId = '66607758db59b9d5cec3a266'
-    const result = await Track.find({
-      likedBy: { $in: [userId] },
-    }).select('-__v -likedBy')
+
+    let trackId = '000'
+    let userId = '66630d0127c3137a1a7605c1'
+    // const result = await User.findByIdAndUpdate(
+    //   userId,
+    //   {
+    //     $addToSet: { recentSearch: trackId },
+    //   },
+    //   {
+    //     runValidators: true,
+    //     new: true,
+    //   }
+    // )
+    const result = await User.findById(userId)
+      .select('recentSearch')
 
     console.log('result: ', result);
   } catch (error) {

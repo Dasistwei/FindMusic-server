@@ -35,28 +35,19 @@ router.get(
   '/:id',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
-    // console.log('req.user ', req.user)
+
     const collectionId = req.params.id
-    // const following = await User.findById(userId).populate({
-    //   path: 'following.user',
-    //   select: 'name', // Only select the 'name' field from the populated user documents
-    // });
+    // let result
     const collection = await Collection.find({ _id: collectionId })
-    // .select('name tracks')
     const trackIds = collection[0].tracks
-    // const tracks = await Track.find({ _id: { $in: trackIds } });
-    const result = await Track.find({ _id: { $in: trackIds } })
-    // console.log('result********************************', result)
-    //   .populate({
-    //     path: 'user',
-    //     select: 'name photo',
-    //   })
-    //   .populate({
-    //     path: 'comments',
-    //     select: 'comment user',
-    //   })
-    //   .sort(timeSort);
-    handleSuccess(res, collection);
+    let result = await Track.find({ trackId: { $in: trackIds } })
+    // if (trackIds.length > 0) {
+    //   result = await Track.find({ trackId: { $in: trackIds } })
+    // } else {
+    //   result = collection
+    // }
+
+    handleSuccess(res, result);
   })
 );
 
@@ -81,23 +72,28 @@ router.post(
   })
 );
 
-//新增 歌單 track
+//歌單 新增 track
 router.post(
   '/add_track',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
-    const { trackId, collectionId } = req.body
-    // const objectIdTrackId = mongoose.Types.ObjectId(trackId);
-    // console.log('objectIdTrackId********************************', trackId, collectionId);
-    // result = await Track.findOneAndUpdate(
-    //   { trackId: trackId },
-    //   {
-    //     $addToSet: { likedBy: userId }
-    //   },
-    //   {
-    //     runValidators: true,
-    //   }
-    // );
+    const { trackId, collectionId, track } = req.body
+    let trackResult;
+    trackResult = await Track.find(
+      { trackId: trackId }
+    );
+
+    if (trackResult.length === 0) {
+      trackResult = await Track.create({
+        trackId: trackId,
+        artists: track.artists,
+        artistsUri: track.artistsUri,
+        title: track.title,
+        uri: track.uri,
+        albumUrl: track.albumUrl,
+        preview_url: track.preview_url,
+      });
+    }
     const result = await Collection.findByIdAndUpdate(
       collectionId,
       {
@@ -108,9 +104,30 @@ router.post(
         // new: true,
       }
     );
-    // console.log("result: *************************************", result)
     if (result !== null) {
-      handleSuccess(res, 'result');
+      handleSuccess(res, result);
+    }
+  })
+);
+//歌單 移除track
+router.delete(
+  '/remove_track',
+  isAuth,
+  handleErrorAsync(async (req, res, next) => {
+    const { trackId, collectionId } = req.body
+
+    const result = await Collection.findByIdAndUpdate(
+      collectionId,
+      {
+        $pull: { tracks: trackId }
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    if (result !== null) {
+      handleSuccess(res, result);
     }
   })
 );
@@ -172,7 +189,7 @@ const init = async () => {
   const req = {
     body: {
       trackId: '0mflMxspEfB0VbI1kyLiAv',
-      collectionId: '6666e0d8fb3dd067c30d85d3'
+      collectionId: '666807b3fd93fd25f842673c'
     }
   }
   try {
@@ -180,14 +197,13 @@ const init = async () => {
     const result = await Collection.findByIdAndUpdate(
       collectionId,
       {
-        $addToSet: { tracks: trackId }
+        $pull: { tracks: trackId }
       },
       {
         runValidators: true,
-        // new: true,
+        new: true,
       }
     );
-
     console.log('result: ', result);
   } catch (error) {
     console.log('error', error);

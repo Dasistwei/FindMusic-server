@@ -53,6 +53,14 @@ const userSchema = new mongoose.Schema(
         // _id: false,
       },
     ],
+    // recentSearch: {
+    //   type: [String], // 定义 recentSearch 为字符串数组
+    //   default: [], // 默认是空数组
+    // },
+    recentSearch: {
+      type: [String],
+      default: []
+    }
   },
   {
     versionKey: false,
