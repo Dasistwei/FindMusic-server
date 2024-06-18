@@ -55,7 +55,7 @@ router.post(
       }
     );
 
-    if (result !== null) return
+    // if (result !== null) return
     if (result === null) {
       if (!req.body.uri.startsWith("spotify:track")) return
       // const trackId = req.body.uri.split(":").pop()
@@ -70,8 +70,7 @@ router.post(
         likedBy: [userId]
       });
     }
-
-    handleSuccess(res, { 'result': result })
+    handleSuccess(res, 'like added')
   })
 );
 

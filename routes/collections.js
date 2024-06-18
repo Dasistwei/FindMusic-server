@@ -47,7 +47,7 @@ router.get(
     //   result = collection
     // }
 
-    handleSuccess(res, result);
+    handleSuccess(res, { tracks: result, collectionName: collection[0].name });
   })
 );
 
