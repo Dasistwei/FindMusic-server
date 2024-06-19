@@ -13,17 +13,19 @@ const handleSuccess = require('../service/handleSuccess');
 const { isAuth, generateSendJWT, generateUrlJWT } = require('../service/auth');
 const passport = require('passport');
 
-router.get(
-  '/',
-  handleErrorAsync(async (req, res) => {
-    const newUser = await User.find({});
-    handleSuccess(res, newUser);
-  })
-);
+// router.get(
+//   '/',
+//   handleErrorAsync(async (req, res) => {
+//     const newUser = await User.find({});
+//     handleSuccess(res, newUser);
+//   })
+// );
 // 註冊
 router.post(
   '/sign_up',
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['User']
+
     for (const key in req.body) {
       req.body[key] = req.body[key].trim();
     }
@@ -82,6 +84,7 @@ router.post(
 router.post(
   '/sign_in',
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['User']
     let { email, password } = req.body;
 
     if (email === undefined || password === undefined) {
@@ -171,10 +174,12 @@ router.post(
 router.get(
   '/google',
   passport.authenticate('google', {
+    // #swagger.tags= ['User']
     scope: ['email', 'profile'],
   })
 );
 router.get('/google/callback', passport.authenticate('google', { session: false }), async (req, res) => {
+  // #swagger.tags= ['User']
   generateUrlJWT(req.user, res);
 });
 

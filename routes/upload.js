@@ -90,6 +90,7 @@ router.post(
   isAuth,
   uploadSounds.single('audio'),
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Upload']
     const file = req.file
     if (!file) {
       return next(appError(400, '無音檔上傳'))

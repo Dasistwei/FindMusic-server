@@ -5,7 +5,6 @@
     "description": "Find Music Api 文件",
     "version": "1.0.0"
   },
-  "host": "localhost:8000",
   "basePath": "/",
   "schemes": [
     "http",
@@ -24,6 +23,9 @@
     },
     "/tracks/getLikeList": {
       "get": {
+        "tags": [
+          "Track"
+        ],
         "description": "",
         "parameters": [
           {
@@ -41,6 +43,9 @@
     },
     "/tracks/{id}/likes": {
       "post": {
+        "tags": [
+          "Track"
+        ],
         "description": "",
         "parameters": [
           {
@@ -89,6 +94,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Track"
+        ],
         "description": "",
         "parameters": [
           {
@@ -112,6 +120,9 @@
     },
     "/tracks/recentSearch": {
       "post": {
+        "tags": [
+          "Track"
+        ],
         "description": "",
         "parameters": [
           {
@@ -139,6 +150,9 @@
         }
       },
       "get": {
+        "tags": [
+          "Track"
+        ],
         "description": "",
         "parameters": [
           {
@@ -156,6 +170,9 @@
     },
     "/collections/": {
       "get": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -171,6 +188,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -200,6 +220,9 @@
     },
     "/collections/{id}": {
       "get": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -221,6 +244,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -254,6 +280,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -277,6 +306,9 @@
     },
     "/collections/add_track": {
       "post": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -312,6 +344,9 @@
     },
     "/collections/remove_track": {
       "delete": {
+        "tags": [
+          "Collections"
+        ],
         "description": "",
         "parameters": [
           {
@@ -342,18 +377,11 @@
         }
       }
     },
-    "/users/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/users/sign_up": {
       "post": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -387,6 +415,9 @@
     },
     "/users/sign_in": {
       "post": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -414,6 +445,9 @@
     },
     "/users/google": {
       "get": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -424,6 +458,9 @@
     },
     "/users/google/callback": {
       "get": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -434,6 +471,9 @@
     },
     "/upload/sounds": {
       "post": {
+        "tags": [
+          "Upload"
+        ],
         "description": "",
         "parameters": [
           {

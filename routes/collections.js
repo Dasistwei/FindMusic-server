@@ -15,6 +15,7 @@ router.get(
   '/',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const userId = req.user[0].id
     const collections = await Collection.find({ user: userId })
       .select('_id name')
@@ -35,6 +36,7 @@ router.get(
   '/:id',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
 
     const collectionId = req.params.id
     // let result
@@ -56,6 +58,7 @@ router.post(
   '/',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const { name } = req.body;
     const userId = req.user[0].id
     console.log('name', name)
@@ -77,6 +80,7 @@ router.post(
   '/add_track',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const { trackId, collectionId, track } = req.body
     let trackResult;
     trackResult = await Track.find(
@@ -114,6 +118,7 @@ router.delete(
   '/remove_track',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const { trackId, collectionId } = req.body
 
     const result = await Collection.findByIdAndUpdate(
@@ -138,6 +143,7 @@ router.put(
   '/:id',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const { name } = req.body
     const collectionId = req.params.id
     const result = await Collection.findByIdAndUpdate(
@@ -164,6 +170,7 @@ router.delete(
   '/:id',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Collections']
     const result = await Collection.findByIdAndDelete(req.params.id);
 
     if (result !== null) {
@@ -178,6 +185,7 @@ router.delete(
 //   '/',
 //   isAuth,
 //   handleErrorAsync(async (req, res, next) => {
+// #swagger.tags= ['Collections']
 //     const result = await Post.deleteMany();
 //     handleSuccess(res, result);
 //   })

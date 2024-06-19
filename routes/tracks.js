@@ -14,6 +14,7 @@ router.get(
   '/getLikeList',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Track']
     const userId = req.user[0].id;
     const likeList = await Track.find({
       likedBy: { $in: [userId] },
@@ -27,6 +28,7 @@ router.post(
   '/:id/likes',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Track']
     const trackId = req.params.id
     let userId = req.user[0].id;
     let result;
@@ -64,6 +66,7 @@ router.delete(
   '/:id/likes',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Track']
     const trackId = req.params.id
     let userId = req.user[0].id;
     const result = await Track.findByIdAndUpdate(
@@ -87,6 +90,7 @@ router.post(
   '/recentSearch',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Track']
     const userId = req.user[0]._id
     const trackId = req.body.trackId
     console.log('use', req.body.trackId)
@@ -124,6 +128,7 @@ router.get(
   '/recentSearch',
   isAuth,
   handleErrorAsync(async (req, res, next) => {
+    // #swagger.tags= ['Track']
     const userId = req.user[0]._id
     const result = await User.findById(userId)
       .select('recentSearch')
