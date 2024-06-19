@@ -20,7 +20,6 @@ process.on('uncaughtException', (err) => {
 });
 
 const httpController = require('./controllers/http');
-
 var indexRouter = require('./routes/index');
 // const postsRouter = require('./routes/posts');
 const tracksRouter = require('./routes/tracks');
