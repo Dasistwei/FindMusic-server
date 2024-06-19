@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-// const Post = require('../models/post');
 const Track = require('../models/track');
 const User = require('../models/user');
 const { isAuth } = require('../service/auth');
@@ -9,20 +8,6 @@ const { isAuth } = require('../service/auth');
 const handleSuccess = require('../service/handleSuccess');
 const appError = require('../service/appError');
 const handleErrorAsync = require('../service/handleErrorAsync');
-
-// const req = {
-//   body: {
-//     _id: "4QyX8CBSjcoq4iMZuvifsssysF9",
-//     artists: "Pritam",
-//     artistsUri: "spotify:artist:1wRPtKGflJrBx9BmLsSwlU",
-//     title: "What Jhumka ? (From \"Rocky Aur Rani Kii Prem Kahaani\")",
-//     uri: "spotify:track:4QyX8CBSjcoq4iMZuvifyF",
-//     albumUrl: "https://i.scdn.co/image/ab67616d00004851a363fadc8b0dfbeea80b240a",
-//     preview_url: "https://p.scdn.co/mp3-preview/ff3a54677840a85c4f8ceb66bc248b9915bf5430?cid=6d6c82e90319486a86b127fc46235b9e",
-//   }
-// }
-
-
 
 //user 按讚的所有歌曲
 router.get(

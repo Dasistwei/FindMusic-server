@@ -4,7 +4,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('dotenv').config({ path: './config.env' });
 const cors = require('cors');
-
+const swaggerUI = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
 
 //DB
 require('./connections/mongoose');
@@ -21,7 +22,7 @@ process.on('uncaughtException', (err) => {
 const httpController = require('./controllers/http');
 
 var indexRouter = require('./routes/index');
-const postsRouter = require('./routes/posts');
+// const postsRouter = require('./routes/posts');
 const tracksRouter = require('./routes/tracks');
 const collectionsRouter = require('./routes/collections');
 const usersRouter = require('./routes/users');
@@ -40,13 +41,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use('/', indexRouter);
-app.use('/posts', postsRouter);
+// app.use('/posts', postsRouter);
 app.use('/tracks', tracksRouter);
 app.use('/collections', collectionsRouter);
 app.use('/users', usersRouter);
 app.use('/upload', uploadRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+//swagger
+app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
 app.use(httpController.pageNotFound);
 // console.log(process.env.SPOTIFY_REDIRECT_URI, process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET);

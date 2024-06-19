@@ -6,7 +6,8 @@
     "prettier": "prettier --write .",
     "start": "nodemon ./bin/www",
     "start:dev": "NODE_ENV=dev nodemon ./bin/www",
-    "start:production": "NODE_ENV=production nodemon ./bin/www"
+    "start:production": "NODE_ENV=production nodemon ./bin/www",
+    "swagger": "node ./swagger.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,6 +28,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "spotify-web-api-node": "^5.0.2",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"
   },
