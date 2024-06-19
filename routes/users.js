@@ -105,67 +105,67 @@ router.post(
 );
 
 // 更新密碼
-router.patch(
-  '/updatePassword',
-  isAuth,
-  handleErrorAsync(async (req, res, next) => {
-    let { password, confirmPassword } = req.body;
+// router.patch(
+//   '/updatePassword',
+//   isAuth,
+//   handleErrorAsync(async (req, res, next) => {
+//     let { password, confirmPassword } = req.body;
 
-    if (password !== confirmPassword) {
-      return next(appError(400, '請確認兩次都輸入相同密碼'));
-    }
-    // 密碼必須英數混合和 8 碼以上
-    if (
-      !validator.isStrongPassword(password, {
-        minLength: 8,
-        minUppercase: 0,
-        minNumbers: 1,
-        minLowercase: 1,
-        minSymbols: 0,
-      })
-    ) {
-      return next(appError(400, '密碼必須英數混合和 8 碼以上', next));
-    }
-    let newPassword = await bcrypt.hash(password, 12);
-    const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
-      password: newPassword,
-    });
+//     if (password !== confirmPassword) {
+//       return next(appError(400, '請確認兩次都輸入相同密碼'));
+//     }
+//     // 密碼必須英數混合和 8 碼以上
+//     if (
+//       !validator.isStrongPassword(password, {
+//         minLength: 8,
+//         minUppercase: 0,
+//         minNumbers: 1,
+//         minLowercase: 1,
+//         minSymbols: 0,
+//       })
+//     ) {
+//       return next(appError(400, '密碼必須英數混合和 8 碼以上', next));
+//     }
+//     let newPassword = await bcrypt.hash(password, 12);
+//     const updatedUser = await User.findByIdAndUpdate(req.user[0].id, {
+//       password: newPassword,
+//     });
 
-    generateSendJWT(updatedUser, res, 200);
-  })
-);
+//     generateSendJWT(updatedUser, res, 200);
+//   })
+// );
 
 // 查看個人資料頁面
 // 要驗證是否登入
-router.get(
-  '/profile',
-  isAuth,
-  handleErrorAsync(async (req, res) => {
-    handleSuccess(res, req.user);
-  })
-);
+// router.get(
+//   '/profile',
+//   isAuth,
+//   handleErrorAsync(async (req, res) => {
+//     handleSuccess(res, req.user);
+//   })
+// );
 
 // 更新個人資料頁面
-router.patch(
-  '/profile',
-  isAuth,
-  handleErrorAsync(async (req, res) => {
-    let { photo, name, gender } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user[0].id,
-      {
-        photo,
-        name,
-        gender,
-      },
-      {
-        new: true,
-      }
-    );
+// router.patch(
+//   '/profile',
+//   isAuth,
+//   handleErrorAsync(async (req, res) => {
+//     let { photo, name, gender } = req.body;
+//     const updatedUser = await User.findByIdAndUpdate(
+//       req.user[0].id,
+//       {
+//         photo,
+//         name,
+//         gender,
+//       },
+//       {
+//         new: true,
+//       }
+//     );
 
-    handleSuccess(res, updatedUser);
-  })
-);
+//     handleSuccess(res, updatedUser);
+//   })
+// );
 
 //google 登入
 router.get(
